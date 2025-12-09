@@ -1,0 +1,34 @@
+services:
+  grok2api:
+    build: .
+    container_name: grok2api
+    ports:
+      - "3003:5200"
+    env_file:
+      - .env
+    environment:
+      # 基础配置 (可通过 .env 文件覆盖)
+      - API_KEY=${API_KEY:-sk-123456}
+      - PORT=${PORT:-5200}
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY:-sk-123456}
+
+      # 管理员鉴权配置 (可通过 .env 文件覆盖)
+      - ADMIN_KEY=${ADMIN_KEY:-admin123}
+
+      # SSO 令牌配置 (可通过 .env 文件覆盖)
+      - SSO=${SSO:-your_sso_cookie_here}
+      - IS_TEMP_CONVERSATION=${IS_TEMP_CONVERSATION:-true}
+
+      # 日志配置 (可通过 .env 文件覆盖)
+      - LOG_LEVEL=${LOG_LEVEL:-ERROR}
+
+      # 代理配置（可选，通过 .env 文件配置）
+      - PROXY=${PROXY:-}
+
+    restart: unless-stopped
+    networks:
+      - grok2api_network
+
+networks:
+  grok2api_network:
+    driver: bridge
